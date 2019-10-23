@@ -1,59 +1,37 @@
 import React, {Component} from 'react';
 import Counter from '../Counter/Counter';
-import './CounterGroup.css'
 
-class CounterGroup extends Component {
-    constructor(props) {
-        super(props);
-        this.handleInputChange.bind(this);
-        this.state = {
-            counterCounts: this.props.defaultCounts, 
-            inputValue: this.props.defaultCounts,
-            sum: 0
-        }
-    }
-
-    counterUpdateCallBack = changeNum => {
-        this.setState({sum: this.state.sum + changeNum})
-    }
-
-    handleInputChange = (event) => {
-        this.setState({inputValue: event.target.value})
+export default class CounterGroup extends Component {
+    componentWillMount() {
+        this.props.generateCounters(this.props.defaultCount);
     }
 
     regenerateCounters = () => {
-        this.setState({counterCounts: this.state.inputValue})
-    }
+        this.props.generateCounters(this.refs.countInput.value);
+        this.props.clearCounterSum();
+    };
 
-    renderCounters = () => {
-        let counters = [];
-        for (let count = 0; count < this.state.counterCounts; count++){
-            counters.push(
-                <Counter
-                    key={count}
-                    onCounterValueChange={this.counterUpdateCallBack}
-                />
-            );
-        }
-        return counters;
-    }
-    
-    render (){
-        let counters = this.renderCounters();
-        return(
-            <div className = "counter-group">
-                <div className = "regenerate">
-                <input type = "text" value={this.state.inputValue} onChange={this.handleInputChange}/>
-            <br/>
-            <button onClick = {this.regenerateCounters}>Regenerate Counters</button>
-            <br/>
-            <span>Sum: {this.state.sum}</span>
-                </div>
-           
-            {counters}
-        </div>
+    render() {
+        return (
+            <div>
+                {this.props.counterArr.map(counterItem => (
+                    <Counter
+                        key={counterItem.id}
+                        id={counterItem.id}
+                        counterValue={counterItem.count}
+                        onCounterValueChange={this.props.counterUpdateCallback}
+                        onClickAdded={this.props.increaseNumber}
+                        onClickDecreased={this.props.decreaseNumber}
+                    />
+                ))}
+                <span>SUM：{this.props.counterSum}</span>
+                <br/>
+                <input type="text" ref="countInput" />
+                <br/>
+                <button onClick={this.regenerateCounters}>
+                    NUMBER
+                </button>
+            </div>
         );
     }
 }
-
-export default CounterGroup;

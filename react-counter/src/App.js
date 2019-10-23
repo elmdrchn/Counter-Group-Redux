@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
-import CounterGroup from './components/CounterGroup/CounterGroup';
+import CounterGroup from './container/ContainerGroup';
 
 function App() {
 
   return (
     <div className="App">
-    <CounterGroup />
+    <CounterGroup defaultCount = "3" />
     </div>
   );
 }
